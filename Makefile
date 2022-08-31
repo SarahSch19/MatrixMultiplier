@@ -2,7 +2,7 @@
 CFLAGS = -Wall -o
 
 #C files
-CFILES = main.c utils.c
+CFILES = main.c utils.c matrix.c
 
 #Executable name
 EXE = matrixMultiplier

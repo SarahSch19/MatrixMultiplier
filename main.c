@@ -5,13 +5,9 @@ Created : 12.12.2020
 Last updated : 31.08.2022
 */
 
-#include "utils.h"
+#include "matrix.h"
 
 int matrixMultiply () ;
-void printMatrix (float **m, size_t lin, size_t col) ;
-float **enterMatrix (size_t lin, size_t col) ;
-float ** multiplyMatrix (float **m1, float **m2, size_t lin, size_t col) ;
-void freeMatrix (float **m, size_t lin) ;
 
 int main () {
     size_t choice = 1 ;
@@ -31,115 +27,29 @@ int main () {
 
 
 int matrixMultiply () {
-    float **m1 = NULL ;
-    float **m2 = NULL ;
-    float **m = NULL ;
-    size_t linM1 ;
-    size_t colM1 ;
-    size_t linM2 ;
-    size_t colM2 ;
+    Matrix m1 ;
+    Matrix m2 ;
+    Matrix multiplied ;
 
-    printf("Enter M1 lines : ") ;
-    linM1 = scanInt();
-    printf("Enter M1 columns : ") ;
-    colM1 = scanInt() ;
+    printHeader("Init matrix 1\n") ;
+    m1 = initMatrix() ;
 
-    printf("Enter M2 lines : ") ;
-    linM2 = scanInt() ;
-    printf("Enter M2 columns : ") ;
-    colM2 = scanInt() ;
+    printHeader("Init matrix 2\n") ;
+    m2 = initMatrix() ;
 
-    if (colM1 != linM2) {
+    if (m1.col != m2.lin) {
         printError("These matrices can't be multiplied\n") ;
+        freeMatrix(m1) ;
+        freeMatrix(m2) ;
         return 1 ;
     }
 
-    m1 = enterMatrix(linM1, colM1) ;
-    printMatrix(m1, linM1, colM1) ;
-    m2 = enterMatrix(linM2, colM2) ;
-    printMatrix(m2, linM2, colM2) ;
+    printHeader("Multiplying matrices\n") ;
+    multiplied = multiply(m1, m2) ;
+    printMatrix(multiplied) ;
 
-    m = multiplyMatrix(m1, m2, linM1, colM2) ;
-    printMatrix(m, linM1, colM2) ;
-
-    freeMatrix(m1, linM1) ;
-    freeMatrix(m2, linM2) ;
-    freeMatrix(m, linM1) ;
+    freeMatrix(m1) ;
+    freeMatrix(m2) ;
+    freeMatrix(multiplied) ;
     return 0 ;
-}
-
-float **enterMatrix (size_t lin, size_t col) {
-    float **m ;
-    size_t i ;
-    size_t j ;
-
-    m = malloc(lin * sizeof(float *)) ;
-    if (m == NULL)
-        return NULL ;
-
-    for (i = 0 ; i < lin ; ++i) {
-        m[i] = malloc(col * sizeof(int)) ;
-        if (m[i] == NULL)
-            return NULL ;
-    }
-    printMessage("Entering matrix data\n") ;
-    for (i = 0 ; i < lin ; ++i) {
-        for (j = 0 ; j < col ; ++j) {
-            printf("Enter m[%zd][%zd] : ", i, j) ;
-            scanf("%f", &m[i][j]) ;
-            fflush(stdin) ;
-        }
-    }
-
-    return m ;
-}
-
-float ** multiplyMatrix (float **m1, float **m2, size_t lin, size_t col) {
-    float **m = NULL ;
-    float tmp ;
-    size_t i ;
-    size_t j ;
-    size_t k ;
-
-    m = malloc(lin * sizeof(float *)) ;
-    if (m == NULL)
-        return NULL ;
-
-    for (i = 0 ; i < lin ; ++i) {
-        m[i] = malloc(col * sizeof(int)) ;
-        if (m[i] == NULL)
-            return NULL ;
-    }
-
-    for (i = 0 ; i < lin ; ++i) {
-        for (j = 0 ; j < col ; ++j) {
-            tmp = 0.0 ;
-            for (k = 0 ; k < col ; ++k) {
-                tmp += m1[i][k] * m2[k][j] ;
-            }
-            m[i][j] = tmp ;
-        }
-    }
-
-    return m ;
-}
-
-void freeMatrix (float **m, size_t lin) {
-    if (m != NULL) {
-        for (size_t i = 0 ; i < lin ; ++i) {
-            if (m[i] != NULL)
-                free(m[i]) ;
-        }
-        free(m) ;
-    }
-}
-
-void printMatrix (float **m, size_t lin, size_t col) {
-    printMessage("Matrix\n") ;
-    for (size_t i = 0 ; i < lin ; ++i) {
-        for (size_t j = 0 ; j < col ; ++j) {
-            printf("%2.2f |", m[i][j]) ;
-        }
-        printf("\n") ;
-    }
 }

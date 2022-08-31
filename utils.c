@@ -21,10 +21,16 @@ void printError (char *message) {
     fprintf(stderr, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n") ;
 }
 
-void printMessage (char *message) {
+void printHeader (char *message) {
     printf("\n\n*****************************\n") ;
     printf("%s", message) ;
     printf("*****************************\n") ;
+}
+
+void printMessage (char *message) {
+    printf("\n\n") ;
+    printf("%s", message) ;
+    printf("-----------------------------\n") ;
 }
 
 void displayMenu () {

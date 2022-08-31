@@ -15,6 +15,7 @@ Last updated : 31.08.2022
 void displayMenu () ;
 size_t scanInt ();
 void printError (char *message) ;
+void printHeader (char *message) ;
 void printMessage (char *message) ;
 
 #endif
